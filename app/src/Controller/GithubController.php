@@ -13,6 +13,6 @@ class GithubController extends AbstractController
         if(!$githubService->score()){
             return $this->json('Total count of the term was not taken',Response::HTTP_BAD_REQUEST);
         }
-        return $this->json(['totalCount'=>$githubService->score()],Response::HTTP_BAD_REQUEST);
+        return $this->json(['term'=>$githubService->score()['term'], 'score'=>round($githubService->score()['score'], 2)],Response::HTTP_OK);
     }
 }
