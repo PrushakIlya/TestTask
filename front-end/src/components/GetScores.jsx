@@ -1,9 +1,5 @@
-import {GET_CODE} from "../vars/urls";
-
-function Main() {
-    return(
-        <a href={GET_CODE}>GitHub log in</a>
-    )
+function GetScores() {
+    console.log(1);
 }
 
-export default Main;
+export default GetScores;

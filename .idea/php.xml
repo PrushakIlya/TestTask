@@ -131,6 +131,7 @@
       <path value="$PROJECT_DIR$/app/vendor/symfony/runtime" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/debug-bundle" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/var-dumper" />
+      <path value="$PROJECT_DIR$/app/vendor/nelmio/cors-bundle" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1">

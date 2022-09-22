@@ -1,4 +1,4 @@
-import {GET_CODE} from "../vars/var";
+import {GET_CODE} from "../vars/urls";
 
 function Main() {
     return(
