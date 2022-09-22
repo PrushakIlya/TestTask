@@ -7,3 +7,9 @@ github_score:
     controller: App\Controller\GithubController::score
     methods: GET
 
+github_login:
+    path: api/v1/index
+    controller: App\Controller\GithubController::index
+    methods: GET
+
+
