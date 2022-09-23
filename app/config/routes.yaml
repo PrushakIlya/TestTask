@@ -7,3 +7,8 @@ github_score:
     controller: App\Controller\GithubController::score
     methods: GET
 
+github_score_update:
+    path: api/v1/update
+    controller: App\Controller\GithubController::update
+    methods: PUT
+
