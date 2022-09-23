@@ -1,3 +1,9 @@
 controllers:
     resource: ../src/Controller/
     type: attribute
+
+github_score:
+    path: api/v1/score
+    controller: App\Controller\GithubController::score
+    methods: GET
+
