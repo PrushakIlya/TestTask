@@ -2,6 +2,10 @@
 namespace App\Services;
 
 use App\Interfaces\Repository;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -17,37 +21,47 @@ class GithubService implements Repository
         $this->client = $client;
     }
     
-    public function score(): array | bool
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    private function getData(): array | bool
     {
         $term = $this->request->getCurrentRequest()->get('term');
-        $terms = ['rocks', 'sucks'];
-        $responses = [];
         if(!$term){
             return false;
         }
+        $terms = ['rocks', 'sucks'];
+        $data['term'] = $term;
         
         foreach ($terms as $item){
-            $response = $this->client->request('GET', 'https://api.github.com/search/issues?q='.$term.'+'.$item, [
+            $response = $this->client->request('GET', 'https://api.github.com/search/issues?q='.$term.'+'.$item,
+                [
                 'headers' => [
                     'Accept' => 'application/vnd.github+json',
-//                    'Authorization' => 'Bearer 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',
                 ],
             ])->getContent();
-            
-            $responses[$item] = json_decode($response)->total_count;
+    
+            $data[$item] = json_decode($response)->total_count;
         }
-
-        if($responses['rocks'] + $responses['sucks'] === 0){
-            return ['term' => $term,'score' => 0];
-        }
-
-        $score = ($responses['rocks']/($responses['rocks'] + $responses['sucks']) / 10) * 100;
+        return $data;
         
+    }
+    
+    public function calculateScore(): array | bool
+    {
+        $data = $this->getData();
+        if($data['rocks'] + $data['sucks'] === 0){
+            return ['term' => $data['term'],'score' => 0];
+        }
+    
+        $score = ($data['rocks']/($data['rocks'] + $data['sucks']) / 10) * 100;
         if ($score > 10 || $score === 10){
             $score = 10;
         }
-        
-        return ['term' => $term,'score' => $score];
-    }
     
+        return ['term' => $data['term'],'score' => $score];
+    }
 }
