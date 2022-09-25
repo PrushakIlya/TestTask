@@ -18,7 +18,7 @@ class GithubController extends AbstractController
     
     public function score(GithubService $githubService): Response
     {
-        $response = $githubService->score();
+        $response = $githubService->calculateScore();
         if(!$response){
             return $this->json('Total count of the term was not taken',Response::HTTP_BAD_REQUEST);
         }
