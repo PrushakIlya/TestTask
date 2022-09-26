@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Score;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -18,7 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class ScoreRepository extends ServiceEntityRepository
 {
     private object $registry;
-    
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Score::class);
@@ -42,33 +41,33 @@ class ScoreRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-    
+
     public function create(string $term, float $score): bool
     {
         $entityManager = $this->registry->getManager();
 
         $scoreEntity = new Score();
-    
+
         $scoreEntity->setTerm($term);
         $scoreEntity->setScore($score);
-        
+
         $entityManager->persist($scoreEntity);
         $entityManager->flush();
-    
+
         return true;
     }
-    
-    public function update(int $id, float $score) : bool
+
+    public function update(int $id, float $score): bool
     {
         $entityManager = $this->registry->getManager();
         $scoreEntity = $entityManager->getRepository(Score::class)->find($id);
         if (!$scoreEntity) {
             return false;
         }
-    
+
         $scoreEntity->setScore($score);
         $entityManager->flush();
-        
+
         return true;
     }
 
