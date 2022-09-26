@@ -3,5 +3,5 @@ namespace App\Interfaces;
 
 interface Repository
 {
-    public function calculateScore(): array | bool;
+    public function calculateScore(): array;
 }
