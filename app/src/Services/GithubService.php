@@ -8,9 +8,11 @@ use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Request;
+use App\Repository\ScoreRepository;
 
 
-class GithubService implements Repository
+class GithubService extends ScoreRepository implements Repository
 {
     private object $request;
     private object $client;
@@ -46,11 +48,11 @@ class GithubService implements Repository
     
             $data[$item] = json_decode($response)->total_count;
         }
-        return $data;
         
+        return $data;
     }
     
-    public function calculateScore(): array | bool
+    public function calculateScore(): array
     {
         $data = $this->getData();
         if($data['rocks'] + $data['sucks'] === 0){
@@ -63,5 +65,11 @@ class GithubService implements Repository
         }
     
         return ['term' => $data['term'],'score' => $score];
+    }
+    
+    //for unittest
+    public function setQueryParameter(string $term)
+    {
+        $this->request->push(new Request(['term'=>$term]));
     }
 }
